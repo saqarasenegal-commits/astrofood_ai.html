@@ -2,8 +2,8 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>AstroFood – Chef AI connecté</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AstroFood – Chef-AI Intelligent 🧠🍽️</title>
     <style>
       :root {
         --gold: #fbbf24;
@@ -23,9 +23,6 @@
         align-items: center;
         border-bottom: 1px solid rgba(251, 191, 36, 0.25);
       }
-      h1 {
-        font-size: 1.3rem;
-      }
       main {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -37,12 +34,6 @@
         border: 1px solid rgba(251, 191, 36, 0.12);
         border-radius: 1rem;
         padding: 1rem;
-      }
-      label {
-        display: block;
-        font-size: 0.75rem;
-        margin-bottom: 0.25rem;
-        opacity: 0.8;
       }
       input, select, textarea, button {
         width: 100%;
@@ -61,100 +52,76 @@
       }
       #ai-output {
         white-space: pre-wrap;
-        font-size: 0.9rem;
-        line-height: 1.4;
       }
       @media (max-width: 960px) {
-        main {
-          grid-template-columns: 1fr;
-        }
+        main { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>AstroFood – Chef AI connecté 🧠🍽️</h1>
-      <p style="opacity: 0.6; font-size: 0.8rem">
-        Version de test – appelle l'API Vercel
-      </p>
+      <h1>AstroFood – Chef-AI Intelligent</h1>
+      <p style="opacity:0.7;font-size:0.8rem;">Connecté à OpenAI</p>
     </header>
 
     <main>
-      <!-- 1. Chat simple -->
       <div class="card">
         <h2>🗣️ Chat AstroFood</h2>
-        <label for="chat-input">Pose ta question (FR / EN / AR) :</label>
-        <textarea id="chat-input" rows="4" placeholder="Ex: Donne-moi un menu pour un Lion qui voyage beaucoup..."></textarea>
+        <textarea id="chat-input" rows="4" placeholder="Ex : Donne-moi un menu pour un Lion…"></textarea>
         <button id="btn-chat">Envoyer au Chef-AI</button>
       </div>
 
-      <!-- 2. Génération de recette -->
       <div class="card">
         <h2>🪐 Recette par signe</h2>
-        <label for="sign">Signe</label>
+        <label for="sign">Signe :</label>
         <select id="sign">
-          <option value="Bélier">Bélier</option>
-          <option value="Taureau">Taureau</option>
-          <option value="Gémeaux">Gémeaux</option>
-          <option value="Cancer">Cancer</option>
-          <option value="Lion">Lion</option>
-          <option value="Vierge">Vierge</option>
-          <option value="Balance">Balance</option>
-          <option value="Scorpion">Scorpion</option>
-          <option value="Sagittaire">Sagittaire</option>
-          <option value="Capricorne">Capricorne</option>
-          <option value="Verseau">Verseau</option>
-          <option value="Poissons">Poissons</option>
+          <option>Bélier</option><option>Taureau</option><option>Gémeaux</option>
+          <option>Cancer</option><option>Lion</option><option>Vierge</option>
+          <option>Balance</option><option>Scorpion</option><option>Sagittaire</option>
+          <option>Capricorne</option><option>Verseau</option><option>Poissons</option>
         </select>
-        <label for="lang">Langue</label>
+        <label for="lang">Langue :</label>
         <select id="lang">
           <option value="fr">Français</option>
           <option value="en">English</option>
           <option value="ar">العربية</option>
         </select>
-        <button id="btn-recipe">Générer la recette AstroFood</button>
+        <button id="btn-recipe">Générer une recette</button>
       </div>
 
-      <!-- 3. Résultat -->
-      <div class="card" style="grid-column: 1 / -1">
+      <div class="card" style="grid-column:1/-1">
         <h2>📄 Réponse AI</h2>
-        <div id="ai-output">Rien encore. Lance un test 👆</div>
+        <div id="ai-output">En attente de ta première demande…</div>
       </div>
     </main>
 
     <script>
-      // ⚠️ change cette URL une fois déployé
-       const API_URL = "https://astrofood-vercel.app/api/astrofood-ai";
-
-        window.location.origin.includes("vercel.app") ||
-        window.location.origin.includes("localhost")
-          ? "/api/astrofood-ai"
-          : "https://TON-DOM-ASTROFOOD.vercel.app/api/astrofood-ai";
+      // 👉 Domaine officiel
+      const API_URL = "https://astrofood-vercel.app/api/astrofood-ai";
 
       const out = document.getElementById("ai-output");
-      const btnChat = document.getElementById("btn-chat");
-      const btnRecipe = document.getElementById("btn-recipe");
 
-      btnChat.addEventListener("click", async () => {
+      document.getElementById("btn-chat").addEventListener("click", async () => {
         const message = document.getElementById("chat-input").value.trim();
-        out.textContent = "⏳ Chef-AI réfléchit...";
+        if (!message) return alert("Écris un message !");
+        out.textContent = "⏳ Le Chef-AI réfléchit...";
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "chat", message }),
+          body: JSON.stringify({ mode: "chat", message })
         });
         const data = await res.json();
         out.textContent = data.text || JSON.stringify(data, null, 2);
       });
 
-      btnRecipe.addEventListener("click", async () => {
+      document.getElementById("btn-recipe").addEventListener("click", async () => {
         const sign = document.getElementById("sign").value;
         const lang = document.getElementById("lang").value;
-        out.textContent = "⏳ Génération de la recette AstroFood...";
+        out.textContent = "🍳 Génération de la recette pour " + sign + "...";
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "recipe", sign, lang }),
+          body: JSON.stringify({ mode: "recipe", sign, lang })
         });
         const data = await res.json();
         out.textContent = data.text || JSON.stringify(data, null, 2);
@@ -162,3 +129,4 @@
     </script>
   </body>
 </html>
+
